@@ -15,7 +15,7 @@ from gspread_dataframe import set_with_dataframe
 IST = timezone('Asia/Kolkata')
 
 # --- Load tickers ---
-tickers_df = pd.read_csv("/home/ashank234/intradayStockOptionsScreener/FnO_stocks_list.csv")  # replace with your file
+tickers_df = pd.read_csv("FnO_stocks_list.csv")  # replace with your file
 tickers = tickers_df['Symbol'].tolist()
 tickers = [t + ".NS" for t in tickers]  # or ".BO" for BSE
 
