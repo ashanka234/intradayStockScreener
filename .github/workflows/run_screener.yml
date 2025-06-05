@@ -2,8 +2,9 @@ name: Run Screener Hourly
 
 # Schedule: Run at the start of every hour (UTC)
 on:
+  workflow_dispatch:    # 👈 manual trigger
   schedule:
-    - cron: '0 * * * *' 
+    - cron: '0 * * * *' # 👈 hourly
 
 jobs:
   run-screener:
