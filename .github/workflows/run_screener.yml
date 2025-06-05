@@ -1,0 +1,28 @@
+name: Run Screener Hourly
+
+# Schedule: Run at the start of every hour (UTC)
+on:
+  schedule:
+    - cron: '0 * * * *' 
+
+jobs:
+  run-screener:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run screener script
+        env:
+          # Put your Google service account JSON as a secret in GitHub (see Step 4)
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: python screener_1h.py
