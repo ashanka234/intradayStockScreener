@@ -145,6 +145,7 @@ print(df)
 
 ###### Write to google sheets ######
 STATE_FILE = 'last_run_date.txt'                # Used to track last cleared date
+SHEET_NAME = 'Intraday_stock_options_screener_output'   # Name of workbook
 # Load Google credentials JSON from environment variable
 credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
