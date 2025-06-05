@@ -5,9 +5,12 @@ from ta.volatility import AverageTrueRange
 from tqdm import tqdm
 from datetime import datetime,date
 import os
+import json
 import gspread
 from gspread_dataframe import set_with_dataframe, get_as_dataframe
 from pytz import timezone
+from google.oauth2.service_account import Credentials
+from gspread_dataframe import set_with_dataframe
 
 IST = timezone('Asia/Kolkata')
 
@@ -141,11 +144,21 @@ print(f"Screened {len(df)} stocks")
 print(df)
 
 ###### Write to google sheets ######
-CREDENTIALS_FILE = '/home/ashank234/intradayStockOptionsScreener/gsheet_credentials.json'      # Path to your Google service account credentials
-SHEET_NAME = 'Intraday_stock_options_screener_output'                    # Name of your Google Sheet
 STATE_FILE = 'last_run_date.txt'                # Used to track last cleared date
+# Load Google credentials JSON from environment variable
+credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
-gc = gspread.service_account(filename=CREDENTIALS_FILE)
+if not credentials_json:
+    raise Exception("Google credentials not found in env variable")
+
+credentials_dict = json.loads(credentials_json)
+scopes = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+credentials = Credentials.from_service_account_info(credentials_dict, scopes=scopes)
+gc = gspread.authorize(credentials)
 sheet = gc.open(SHEET_NAME).sheet1
 
 # Check if sheet should be cleared today
